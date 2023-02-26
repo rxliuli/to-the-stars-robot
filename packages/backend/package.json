@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e .env.local py main.py",
+    "build": "docker build -t to-the-stars-robot-backend .",
+    "preview": "docker run --env-file .env.local -dp 8000:8000 to-the-stars-robot-backend",
+    "deploy": "docker tag to-the-stars-robot-backend rxliuli/to-the-stars-robot-backend && docker push rxliuli/to-the-stars-robot-backend"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.0.0"
+  }
+}

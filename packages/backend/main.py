@@ -1,11 +1,11 @@
-
 from llama_index import (
     GPTSimpleVectorIndex,
     SimpleDirectoryReader,
 )
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
+import os
+os.environ["OPENAI_API_KEY"] = os.environ.get('OPENAI_API_KEY')
 
 
 def indexing():
@@ -23,10 +23,10 @@ def query(s):
 # indexing()
 # print(query("Who is Clarisse van Rossum"))
 
+
 class MyHandler(BaseHTTPRequestHandler):
     def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin',
-                         'http://localhost:8000, https://tts-robot.liuli.moe')
+        self.send_header('Access-Control-Allow-Origin', '*')
         super().end_headers()
 
     def do_GET(self):
@@ -36,15 +36,20 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(str(query(query_params['q'][0])).encode())
+            r = str(query(query_params['q'][0]))
+            print("r", r)
+            self.wfile.write(r.encode())
+            # self.wfile.write(str('hello world').encode())
         else:
             self.send_response(400)
             self.end_headers()
             self.wfile.write(b"Missing 'q' parameter")
 
 
-PORT = 8000
+PORT = int(os.environ.get('PORT'))
 
 with HTTPServer(("", PORT), MyHandler) as httpd:
+    print("env: ", os.environ.get(
+        'OPENAI_API_KEY'), PORT)
     print(f"Serving on port {PORT}")
     httpd.serve_forever()

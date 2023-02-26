@@ -8,7 +8,7 @@ export function App() {
   const [loading, setLoading] = useState(false)
   async function onQuest(quest: string) {
     const q = quest.trim()
-    if (q.length === 0) {
+    if (q.length === 0 || loading) {
       return
     }
     try {
