@@ -20,7 +20,6 @@ def query(s):
     response = index.query(s)
     return response
 
-
 # indexing()
 # print(query("Who is Clarisse van Rossum"))
 

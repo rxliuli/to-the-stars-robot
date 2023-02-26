@@ -7,11 +7,15 @@ export function App() {
   const [a, setA] = useState('')
   const [loading, setLoading] = useState(false)
   async function onQuest(quest: string) {
+    const q = quest.trim()
+    if (q.length === 0) {
+      return
+    }
     try {
-      setQ(quest)
+      setQ(q)
       setLoading(true)
       const p = new URLSearchParams()
-      p.set('q', quest)
+      p.set('q', quest.trim())
       const resp = await fetch(
         import.meta.env.VITE_BASE_URL + '?' + p.toString(),
       )
@@ -25,11 +29,7 @@ export function App() {
 
   useEffect(() => {
     const onHandle = async (ev: KeyboardEvent): Promise<void> => {
-      if (
-        ev.target instanceof HTMLTextAreaElement &&
-        ev.key === 'Enter' &&
-        ev.ctrlKey
-      ) {
+      if (ev.target instanceof HTMLInputElement && ev.key === 'Enter') {
         ev.preventDefault()
         await onQuest(ev.target.value)
       }
@@ -40,13 +40,19 @@ export function App() {
 
   return (
     <>
-      <textarea
-        rows={4}
+      <h2>to the stars robot</h2>
+      <input
         value={q}
         onChange={(e) => setQ((e.target as HTMLTextAreaElement).value)}
-      ></textarea>
-      <button aria-busy={loading} type={'button'} onClick={() => onQuest(q)}>
-        Commit
+        onInput={(e) => setQ((e.target as HTMLTextAreaElement).value)}
+      />
+      <button
+        aria-busy={loading}
+        disabled={q.length === 0}
+        type={'button'}
+        onClick={() => onQuest(q)}
+      >
+        Quest
       </button>
       <p>{a}</p>
     </>
