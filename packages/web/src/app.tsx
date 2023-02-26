@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
 import '@picocss/pico'
-import './app.css'
 
 export function App() {
   const [q, setQ] = useState('')
@@ -40,7 +39,7 @@ export function App() {
 
   return (
     <>
-      <h2>to the stars robot</h2>
+      <h2>To the Stars Robot</h2>
       <input
         value={q}
         onChange={(e) => setQ((e.target as HTMLTextAreaElement).value)}
